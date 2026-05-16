@@ -1,0 +1,6 @@
+order_id,customer_id,customer_name,product_name,category,quantity,unit_price,total_amount,order_date,status
+1011,C011,Rohan Gupta,Webcam HD,Electronics,1,2999.00,2999.00,2024-01-15,Processing
+1012,C012,Kavya Reddy,File Organizer,Stationery,3,349.00,1047.00,2024-01-16,Shipped
+1013,C013,Suresh Babu,Gaming Headset,Electronics,1,4999.00,4999.00,2024-01-17,Delivered
+1014,C014,Lakshmi Rao,Standing Desk,Furniture,1,15999.00,15999.00,2024-01-18,Processing
+1015,C015,Nikhil Sharma,Pen Drive 64GB,Electronics,2,799.00,1598.00,2024-01-19,Shipped
