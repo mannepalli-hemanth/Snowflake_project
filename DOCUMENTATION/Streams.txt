@@ -1,0 +1,60 @@
+use database min_prjt_db;
+use schema raw;
+
+create or replace table source_table1(
+  id int,
+  name varchar,
+  created_date date
+);
+
+insert into source_table1 values
+  (1, 'Ram', '2026-05-21'),
+  (2, 'Raj', '2026-05-29');
+
+// standard STREAM
+
+create or replace stream strd_stream on table source_table1;
+
+select * from source_table1;
+
+select * from strd_stream;
+
+insert into source_table1 values 
+(3, 'Ragu', '2026-05-30');
+
+delete from source_table1 where id = 2;
+
+update source_table1 set name = 'Rahul' where id = 1;
+
+select * from source_table1;
+
+select * from strd_stream;
+
+select system$pipe_status('orders_pipe');
+show pipes;
+
+// Append-only stream
+
+create or replace table source_table2(
+  id int,
+  name varchar,
+  created_date date
+);
+
+insert into source_table2 values
+(1, 'ravi', '2026-08-02'),
+(2, 'ram', '2026-05-08');
+
+create or replace stream app_stream on table source_table2 APPEND_ONLY = TRUE;
+
+select * from app_stream;
+
+insert into source_table2 values (3, 'rajeev', '2026-05-03');
+
+INSERT INTO SOURCE_TABLE2 VALUES (4,'REKHA', '2025-09-08');
+
+update source_table2 set name = 'KING' where id = 1;
+
+select * from app_stream;
+
+SELECT * FROM SOURCE_TABLE2;
