@@ -11,7 +11,7 @@ insert into source_table1 values
   (1, 'Ram', '2026-05-21'),
   (2, 'Raj', '2026-05-29');
 
-// standard STREAM
+// standard STREAM --> IT TRACKS ALL TYPE OF MODIFICATIONS LIKE INSERT, UPDATE & DELETE GO WITH THE STANDARTD STREAM
 
 create or replace stream strd_stream on table source_table1;
 
