@@ -33,7 +33,7 @@ select * from strd_stream;
 select system$pipe_status('orders_pipe');
 show pipes;
 
-// Append-only stream
+// Append-only stream --> IT TRACKS ONLY THE NEW ROWS INSERTED TO THE TABLE & DOESN'T CARE ABOUT UPDATE & DELETE ACTIONS, THE MAIN BENIFIT OF THIS STREAM IS, YOU CAN SEE THE NEW DATA AS IT ARRIVES
 
 create or replace table source_table2(
   id int,
