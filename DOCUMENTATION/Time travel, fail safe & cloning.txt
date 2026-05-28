@@ -1,8 +1,21 @@
-use role accountadmin;
-use warehouse compute_wh;
-use database tasks_db;
-use schema nrml;
+TIME TRAVEL --> at(offset), at(timestamp), before(statement => statement_id)
+-----------     ------------------------------------------------------------
 
+In this we can go back to the time where u have deleted the data and we can view that data, if u want to restore the deleted data either u have to go with insert into command or create table as command.
+
+example;
+
+insert into employee
+select * from 
+employee before(statement => 'statement_id')
+
+
+create table <table_name> as 
+select * 
+from employee
+before(statement => 'statement_id')
+
+------------------------------------------
 create or replace table raw_tbl(
         id int,
         name varchar
@@ -53,4 +66,38 @@ select * from raw_tbl_1 before (statement => '01c4acad-000d-bffc-0000-56090008fe
 select * from clone_raw;
 
 create TABLE RAW_CLONE CLONE raw_tbl BEFORE(STATEMENT => '01c4aca1-000d-c02f-0000-560900090c02');
+
+
+FAIL SAFE;
+----------
+
+It is one of the option that we can retrive the deleted data after it doesn't have in the timetravel, that means the time travel works if there is a retention period, if the retention period is over then fail safe comes into picture and that u can have this for only 7 days.
+
+And we can't able to do fail safe from our side it is purely done by snowflake admin side.
+
+Cloning;
+--------
+
+It is a type of copying techenic that coping the data from one table to another 
+
+
+Restore delete table/schema/database
+------------------------------------
+
+UNDROP TABLE/SCHEMA/DATABASE
+
+
+
+FINAL UNDESTANDING ABOUT TIME TRAVEL, FAIL SAFE & CLONING;
+-----------------------------------------------------------
+
+AT(OFFSET => SECONDS) --> VIEW OLD DATA AT EXACT SECONDS BACK
+AT(TIMESTAMP => TIMESTAMP) --> VIEW DATA AT EXACT TIMESTAMP
+BEFORE(STATEMENT => STATEMANT_ID) --> VIEW DATA BEFORE THAT STATEMENT_ID HAS EXECUTED
+UNDROP --> RECOVER DELETED OBJECTS LIKE TABLES, SCHEMAS & DATABASES
+CLONE --> CPOING DATA
+INSERT + TIME TAVEL --> RECOVER DELETED DATA
+ 
+
+
 
