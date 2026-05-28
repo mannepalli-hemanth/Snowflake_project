@@ -1,0 +1,56 @@
+use role accountadmin;
+use warehouse compute_wh;
+use database tasks_db;
+use schema nrml;
+
+create or replace table raw_tbl(
+        id int,
+        name varchar
+);
+
+insert into raw_tbl values
+(1, 'shami'),
+(2, 'ravi');
+
+select * from raw_tbl;
+
+delete from raw_tbl where id = 2;
+
+select * from raw_tbl at(offset => -60*7);
+
+insert into raw_tbl values
+(2, 'ram'),
+(3, 'hari'),
+(4, 'shiva');
+
+select * from raw_tbl;
+show tables;
+delete from raw_tbl where id = 4;
+
+select * from raw_tbl at(offset => -60*2);
+select * from raw_tbl before(statement => '01c4aca1-000d-c02f-0000-560900090c02');
+
+create or replace table raw_tbl_1(
+  id int,
+  name varchar
+);
+
+insert into raw_tbl_1 values
+(1, 'raghu'),
+(2, 'ram'),
+(3, 'hari'),
+(4, 'shiva');
+
+select * from raw_tbl_1;
+
+delete from raw_tbl_1 where id = 2;
+show tables;
+select * from raw_tbl_1 at (timestamp => '2026-05-28 10:16:57.743 -0700');
+
+create table clone_raw as 
+select * from raw_tbl_1 before (statement => '01c4acad-000d-bffc-0000-56090008fe36');
+
+select * from clone_raw;
+
+create TABLE RAW_CLONE CLONE raw_tbl BEFORE(STATEMENT => '01c4aca1-000d-c02f-0000-560900090c02');
+
