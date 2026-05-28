@@ -1,0 +1,88 @@
+create database tasks_db;
+create schema nrml;
+use role accountadmin;
+use warehouse compute_wh;
+use database tasks_db;
+use schema nrml;
+
+create or replace table src_tbl_1(
+  id int,
+  name varchar,
+  created_date date
+);
+
+insert into src_tbl_1 values
+(1, 'kinh', '2022-09-07'),
+(2, 'jdguk', '2000-05-04');
+
+select * from src_tbl_1;
+
+create or replace table trgt_tbl_1(
+  id int,
+  name varchar,
+  created_date date,
+  created_day varchar,
+  created_month varchar,
+  created_year varchar
+);
+
+select * from trgt_tbl_1;
+
+insert into trgt_tbl_1
+select 
+a.id,
+a.name,
+a.created_date,
+day(a.created_date) as created_day,
+month(a.created_date) as created_month,
+year(a.created_date) as created_year
+from src_tbl_1 as a
+left join trgt_tbl_1 as b
+on a.id = b.id;
+
+select * from trgt_tbl_1;
+
+insert into src_tbl_1 values (3, 'rauhidfh','2026-05-01');
+-----------------------------------------------------------------------
+create or replace table src_tbl_2(
+  id int,
+  name varchar,
+  created_date date
+);
+
+insert into src_tbl_2 values
+(1, 'werged', '1999-09-09'),
+(2, 'fgwvk', '2000-01-01');
+
+create or replace table trgt_tbl_2(
+  id int,
+  name varchar,
+  created_date date,
+  created_day varchar,
+  created_month varchar,
+  created_year varchar
+);
+
+create or replace task copy_dat
+warehouse = compute_wh,
+schedule = '1 minute'
+as
+insert into trgt_tbl_2
+select
+a.id,
+a.name,
+a.created_date,
+day(a.created_date) as created_day,
+month(a.created_date) as created_month,
+year(a.created_date) as created_month
+from src_tbl_2 as a 
+left join trgt_tbl_2 as b 
+on a.id = b.id ;
+
+show tasks;
+
+select * from table(information_schema.task_history(task_name => 'copy_dat'));
+
+alter task copy_dat suspend;
+
+select * from trgt_tbl_2;
