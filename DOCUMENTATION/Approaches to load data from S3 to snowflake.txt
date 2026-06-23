@@ -3,22 +3,17 @@ Approach - 1
 Loading by using access id and access key from S3
 ----------------------------------------------------
 
-CREATE DATABASE MIN_PRJT_DB;
-CREATE SCHEMA RAW;
+create database sfp_db;
+create schema raw;
+use database sfp_db;
+use schema raw;
 
-DROP STAGE IF EXISTS AWS_STG;
-DROP STORAGE INTEGRATION IF EXISTS AWS_ING;
+create or replace stage s3_stage
+url = 's3://test-project-18052026/orders/'
+credentials = (AWS_KEY_ID = 'AKIATOH23E5AAXW65566'
+               AWS_SECRET_KEY = '6AzJJTLiMWB40IFBkTlvPbIfVphvR3hLuBZfYUIO');
 
-
-
-DESC STORAGE INTEGRATION AWS_ING;
-
-CREATE OR REPLACE STAGE AWS_STG
-URL = 's3://test-project-18052026/orders/'
-CREDENTIALS = (AWS_KEY_ID = 'XXXXXXXXXXXXXXXX' 
-               AWS_SECRET_KEY ='XXXXXXXXXXXXXXXXXXXXXXXXXX');
-
-LS @AWS_STG;
+LS @S3_STAGE;
 
 CREATE OR REPLACE TABLE ORDERS_RAW(
  ORDER_ID NUMBER,
@@ -33,15 +28,8 @@ CREATE OR REPLACE TABLE ORDERS_RAW(
  STATUS VARCHAR(20)
 );
 
-SELECT CURRENT_DATABASE(),
-       CURRENT_SCHEMA(),
-       CURRENT_WAREHOUSE();
-
-USE DATABASE MIN_PRJT_DB;
-USE SCHEMA RAW;
-
 COPY INTO ORDERS_RAW
-FROM @AWS_STG
+FROM @S3_STAGE
 FILE_FORMAT = (
     TYPE = 'CSV'
     FIELD_OPTIONALLY_ENCLOSED_BY = '"'
